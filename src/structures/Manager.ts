@@ -35,7 +35,7 @@ export const LoadTypes = {
 function check(options: ManagerOptions) {
   if (!options) throw new TypeError("ManagerOptions must not be empty.");
 
-  if (typeof options.send !== "function") 
+  if (typeof options.send !== "function")
     throw new TypeError('Manager option "send" must be present and a function.');
 
   if (typeof options.clientId !== "undefined" && !/^\d+$/.test(options.clientId))
@@ -58,7 +58,7 @@ function check(options: ManagerOptions) {
 
   if (typeof options.clientName !== "undefined" && typeof options.clientName !== "string")
     throw new TypeError('Manager option "clientName" must be a string.');
-  
+
   if (typeof options.defaultSearchPlatform !== "undefined" && typeof options.defaultSearchPlatform !== "string")
   throw new TypeError('Manager option "defaultSearchPlatform" must be a string.');
 
@@ -70,43 +70,43 @@ function check(options: ManagerOptions) {
 
   if (typeof options.position_update_interval !== "undefined" && (typeof options.position_update_interval !== "number" || isNaN(options.position_update_interval)))
     throw new TypeError('Manager option "position_update_interval" must be a number between 50 and 1000., set it to 0 to disable it');
-    
+
   if ((options.position_update_interval > 1000 || options.position_update_interval < 50) && options.position_update_interval !== 0)
   throw new TypeError('Manager option "position_update_interval" must be a number between 50 and 1000., set it to 0 to disable it');
 
   if (typeof options.validUnresolvedUris !== "undefined" && !Array.isArray(options.validUnresolvedUris) && !(options.validUnresolvedUris as string[]).every(v => typeof v === "string"))
     throw new TypeError('Manager option "validUnresolvedUris" must be an array of strings');
-  
+
   if (typeof options.forceLoadPlugin !== "undefined" && typeof options.forceLoadPlugin !== "boolean")
     throw new TypeError('Manager option "forceLoadPlugin" must be a boolean');
-  
+
   if (typeof options.allowedLinks !== "undefined" && !Array.isArray(options.allowedLinks) && !(options.allowedLinks as string[]).every(v => typeof v === "string"))
     throw new TypeError('Manager option "allowedLinks" must be an array of strings');
- 
+
   if (typeof options.allowedLinksRegexes !== "undefined" && !Array.isArray(options.allowedLinksRegexes) && !(options.allowedLinksRegexes as RegExp[]).every(v => v instanceof RegExp))
     throw new TypeError('Manager option "allowedLinksRegexes" must be an array of regexes');
-  
+
   if (typeof options.onlyAllowAllowedLinks !== "undefined" && typeof options.onlyAllowAllowedLinks !== "boolean")
     throw new TypeError('Manager option "onlyAllowAllowedLinks" must be a boolean');
-  
+
   if (typeof options.defaultLeastUsedNodeSortType !== "undefined" && options.defaultLeastUsedNodeSortType !== "memory" && options.defaultLeastUsedNodeSortType !== "calls" && options.defaultLeastUsedNodeSortType !== "players")
     throw new TypeError('Manager option "defaultLeastUsedNodeSortType" must be a string of leastUsedNodeSortType ("memory" | "calls" | "players")');
-  
+
   if (typeof options.defaultLeastLoadNodeSortType !== "undefined" && options.defaultLeastLoadNodeSortType !== "cpu" && options.defaultLeastLoadNodeSortType !== "memory")
     throw new TypeError('Manager option "defaultLeastLoadNodeSortType" must be a string of leastUsedNodeSortType ("cpu" | "memory")');
-  
+
   if (typeof options.useUnresolvedData !== "undefined" && typeof options.useUnresolvedData !== "boolean")
     throw new TypeError('Manager option "useUnresolvedData" must be a boolean');
-  
+
   if (typeof options.forceSearchLinkQueries !== "undefined" && typeof options.forceSearchLinkQueries !== "boolean")
     throw new TypeError('Manager option "forceSearchLinkQueries" must be a boolean');
-  
+
   if (typeof options.userAgent !== "undefined" && typeof options.userAgent !== "string")
     throw new TypeError('Manager option "userAgent" must be a string (public useragent when doing fetch requests)');
-  
+
   if (typeof options.restTimeout !== "undefined" && (typeof options.restTimeout !== "number" || isNaN(options.restTimeout)))
     throw new TypeError('Manager option "restTimeout" must be a number');
-    
+
   if (typeof options.applyVolumeAsFilter !== "undefined" && typeof options.applyVolumeAsFilter !== "boolean")
     throw new TypeError('Manager option "applyVolumeAsFilter" must be a boolean');
 }
@@ -272,7 +272,7 @@ export class Manager extends EventEmitter {
     // apple music
     "amsearch": "amsearch",
     "am": "amsearch",
-    // spotify 
+    // spotify
     "spsearch": "spsearch",
     "sp": "spsearch",
     "sprec": "sprec",
@@ -294,7 +294,7 @@ export class Manager extends EventEmitter {
   public static readonly regex: Record<SourcesRegex, RegExp> = {
     YoutubeRegex: /https?:\/\/?(?:www\.)?(?:(m|www)\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|shorts|playlist\?|watch\?v=|watch\?.+(?:&|&#38;);v=))([a-zA-Z0-9\-_]{11})?(?:(?:\?|&|&#38;)index=((?:\d){1,3}))?(?:(?:\?|&|&#38;)?list=([a-zA-Z\-_0-9]{34}))?(?:\S+)?/,
     YoutubeMusicRegex: /https?:\/\/?(?:www\.)?(?:(music|m|www)\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|shorts|playlist\?|watch\?v=|watch\?.+(?:&|&#38;);v=))([a-zA-Z0-9\-_]{11})?(?:(?:\?|&|&#38;)index=((?:\d){1,3}))?(?:(?:\?|&|&#38;)?list=([a-zA-Z\-_0-9]{34}))?(?:\S+)?/,
-    
+
     SoundCloudRegex: /https:\/\/(?:on\.)?soundcloud\.com\//,
     SoundCloudMobileRegex: /https?:\/\/(soundcloud\.app\.goo\.gl)\/(\S+)/,
 
@@ -308,7 +308,7 @@ export class Manager extends EventEmitter {
     // DeezerPodcastRegex: /(https?:\/\/|)?(?:www\.)?deezer\.com\/(?:\w{2}\/)?podcast\/(\d+)/,
     AllDeezerRegexWithoutPageLink: /(https?:\/\/|)?(?:www\.)?deezer\.com\/(?:\w{2}\/)?(track|playlist|album|artist|mixes\/genre|episode)\/(\d+)/,
     AllDeezerRegex: /((https?:\/\/|)?(?:www\.)?deezer\.com\/(?:\w{2}\/)?(track|playlist|album|artist|mixes\/genre|episode)\/(\d+)|(https?:\/\/|)?(?:www\.)?deezer\.page\.link\/(\S+))/,
-    
+
     SpotifySongRegex: /https?:\/\/(www\.)?open\.spotify\.com\/track\/([A-Za-z0-9]+)/,
     SpotifyPlaylistRegex: /https?:\/\/(www\.)?open\.spotify\.com\/playlist\/([A-Za-z0-9]+)/,
     SpotifyArtistRegex: /https?:\/\/(www\.)?open\.spotify\.com\/artist\/([A-Za-z0-9]+)/,
@@ -316,7 +316,7 @@ export class Manager extends EventEmitter {
     SpotifyShowRegex: /https?:\/\/(www\.)?open\.spotify\.com\/show\/([A-Za-z0-9]+)/,
     SpotifyAlbumRegex: /https?:\/\/(www\.)?open\.spotify\.com\/album\/([A-Za-z0-9]+)/,
     AllSpotifyRegex: /https?:\/\/(www\.)?open\.spotify\.com\/(track|playlist|artist|episode|show|album)\/([A-Za-z0-9]+)/,
-    
+
     mp3Url: /(https?|ftp|file):\/\/(www.)?(.*?)\.(mp3)$/,
     m3uUrl: /(https?|ftp|file):\/\/(www.)?(.*?)\.(m3u)$/,
     m3u8Url: /(https?|ftp|file):\/\/(www.)?(.*?)\.(m3u8)$/,
@@ -326,7 +326,7 @@ export class Manager extends EventEmitter {
 
     tiktok: /https:\/\/www\.tiktok\.com\//,
     mixcloud: /https:\/\/www\.mixcloud\.com\//,
-    musicYandex: /https:\/\/music\.yandex\.ru\//, 
+    musicYandex: /https:\/\/music\.yandex\.ru\//,
     radiohost: /https?:\/\/[^.\s]+\.radiohost\.de\/(\S+)/,
     bandcamp: /https?:\/\/?(?:www\.)?([\d|\w]+)\.bandcamp\.com\/(\S+)/,
     appleMusic: /https?:\/\/?(?:www\.)?music\.apple\.com\/(\S+)/,
@@ -377,7 +377,7 @@ export class Manager extends EventEmitter {
   }
 
 
-  
+
   public get leastLoadNodesMemory(): Collection<string, Node> {
     return this.nodes
             .filter((node) => node.connected)
@@ -488,7 +488,7 @@ export class Manager extends EventEmitter {
   /**
    * Initiates the Manager.
    * @param {string} clientID
-   * @param {{ clientId?: string, clientName?: string, shards?: number }} objectClientData 
+   * @param {{ clientId?: string, clientName?: string, shards?: number }} objectClientData
    */
   public init(clientID?: string, objectClientData: { clientId?: string, clientName?: string, shards?: number } = {}): this {
     const { clientId, clientName, shards } = objectClientData;
@@ -498,7 +498,7 @@ export class Manager extends EventEmitter {
     if (typeof clientId !== "undefined") this.options.clientId = clientId;
     if (typeof clientName !== "undefined") this.options.clientName = clientName || `Unknown Name - ${clientId||clientID}`;
     if (typeof shards !== "undefined") this.options.shards = shards;
-    
+
     if (typeof this.options.clientId !== "string") throw new Error('"clientId" set is not type of "string"');
     if (!this.options.clientId) throw new Error('"clientId" is not set. Pass it in Manager#init() or as a option in the constructor.');
 
@@ -528,15 +528,16 @@ export class Manager extends EventEmitter {
    */
   public search(
     query: string | SearchQuery,
-    requester?: unknown, 
+    requester?: unknown,
     customNode?: Node,
   ): Promise<SearchResult> {
     return new Promise(async (resolve, reject) => {
       const node = customNode || this.leastUsedNodes.first();
       if (!node) throw new Error("No available nodes.");
       const _query: SearchQuery = typeof query === "string" ? { query } : query;
-      const _source = Manager.DEFAULT_SOURCES[_query.source ?? this.options.defaultSearchPlatform] ?? _query.source ?? this.options.defaultSearchPlatform;
-      
+      let _source = Manager.DEFAULT_SOURCES[_query.source ?? this.options.defaultSearchPlatform] ?? _query.source ?? this.options.defaultSearchPlatform;
+      if (!_source || typeof _source !== 'string') _source = 'scsearch';
+
       _query.query = _query?.query?.trim?.();
 
       const link = this.getValidUrlOfQuery(_query.query);
@@ -545,18 +546,18 @@ export class Manager extends EventEmitter {
       }
       if(link && this.options.forceSearchLinkQueries) return await this.searchLink(link, requester, customNode).then(data => resolve(data)).catch(err => reject(err));
 
-      
-      // only set the source, if it's not a link 
+
+      // only set the source, if it's not a link
       const search = `${!/^https?:\/\//.test(_query.query) ? `${_source}:` : ""}${_query.query}`;
-      
+
       this.validatedQuery(search, node);
 
       const res = await node
         .makeRequest<LavalinkResult>(`/loadtracks?identifier=${encodeURIComponent(search)}`)
         .catch(err => reject(err));
 
-      if (!res) return reject(new Error("Query not found."));
-      
+      if (!res || res.loadType === "NO_MATCHES" || !res?.tracks || !Array.isArray(res?.tracks)) return reject(new Error("Query not found."));
+
       const result: SearchResult = {
         loadType: res.loadType,
         exception: res.exception ?? null,
@@ -603,7 +604,7 @@ export class Manager extends EventEmitter {
      */
   public searchLink(
     query: string | SearchQuery,
-    requester?: unknown, 
+    requester?: unknown,
     customNode?: Node,
   ): Promise<SearchResult> {
     return new Promise(async (resolve, reject) => {
@@ -619,15 +620,15 @@ export class Manager extends EventEmitter {
       if(this.options.allowedLinksRegexes?.length || this.options.allowedLinks?.length) {
           if(link && !this.options.allowedLinksRegexes?.some(regex => regex.test(link)) && !this.options.allowedLinks?.includes(link)) reject(new Error(`Query ${_query.query} Contains link: ${link}, which is not an allowed / valid Link`));
       }
-      
+
       this.validatedQuery(_query.query, node);
 
       const res = await node
           .makeRequest<LavalinkResult>(`/loadtracks?identifier=${encodeURIComponent(_query.query)}`)
           .catch(err => reject(err));
 
-      if (!res) return reject(new Error("Query not found."));
-      
+      if (!res || res.loadType === "NO_MATCHES" || !res?.tracks || !Array.isArray(res?.tracks)) return reject(new Error("Query not found."));
+
       const result: SearchResult = {
         loadType: res.loadType,
         exception: res.exception ?? null,
@@ -669,7 +670,7 @@ export class Manager extends EventEmitter {
   validatedQuery(queryString:string, node:Node):void {
     if(!node.info) return;
     if(!node.info.sourceManagers?.length) throw new Error("Lavalink Node, has no sourceManagers enabled");
-    
+
     // missing links: beam.pro local getyarn.io clypit pornhub reddit ocreamix soundgasm
     if((Manager.regex.YoutubeMusicRegex.test(queryString) || Manager.regex.YoutubeRegex.test(queryString)) && !node.info.sourceManagers.includes("youtube")) {
       throw new Error("Lavalink Node has not 'youtube' enabled");
@@ -707,7 +708,7 @@ export class Manager extends EventEmitter {
     if(Manager.regex.musicYandex.test(queryString) && !node.info.sourceManagers.includes("yandexmusic")) {
       throw new Error("Lavalink Node has not 'yandexmusic' enabled");
     }
-    
+
     const hasSource = queryString.split(":")[0];
     if(queryString.split(" ").length <= 1 || !queryString.split(" ")[0].includes(":")) return;
     const source = Manager.DEFAULT_SOURCES[hasSource] as LavalinkSearchPlatform;
@@ -865,8 +866,8 @@ export class Manager extends EventEmitter {
       return;
     }
     /* voice state update */
-    if (update.user_id !== this.options.clientId) return;      
-    
+    if (update.user_id !== this.options.clientId) return;
+
     if (update.channel_id) {
       if (player.voiceChannel !== update.channel_id) {
         this.emit("playerMove", player, player.voiceChannel, update.channel_id);
@@ -916,7 +917,7 @@ export interface ManagerOptions {
   /** @default "youtube" The default search platform to use, can be "youtube", "youtube music", "soundcloud", "deezer", "spotify", ... */
   defaultSearchPlatform?: SearchPlatform;
   /** used to decrement the volume to a % */
-  volumeDecrementer?: number; 
+  volumeDecrementer?: number;
   /** used to change the position_update_interval from 250ms to X ms */
   position_update_interval?: number;
   /** Extra Uris which are allowed to be saved as a unresolved from URI (only provide ones which can be handled by LAVALINK) */
