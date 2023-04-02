@@ -48,7 +48,7 @@ function check(options: NodeOptions) {
   if (typeof options.requestTimeout !== "undefined" && typeof options.requestTimeout !== "number")
     throw new TypeError('Node option "requestTimeout" must be a positive number.');
 
-  if(typeof options.poolOptions !== "undefined" && typeof options.poolOptions !== "object") 
+  if(typeof options.poolOptions !== "undefined" && typeof options.poolOptions !== "object")
     throw new TypeError("Node option 'poolOptions' must be a correct undicie Http pool options-Object!");
 
   if(typeof options.regions !== "undefined" && !Array.isArray(options.regions))
@@ -60,7 +60,7 @@ function check(options: NodeOptions) {
   if(typeof options.version !== "undefined" && typeof options.version !== "string" && !["v2", "v3"].includes(options.version))
     throw new TypeError("Node Option 'version' must be either v2 or v3");
 
-  if(typeof options.useVersionPath !== "undefined" && typeof options.useVersionPath !== "boolean") 
+  if(typeof options.useVersionPath !== "undefined" && typeof options.useVersionPath !== "boolean")
     throw new TypeError("Node Option 'useVersionPath' must be a Boolean");
 
   return true;
@@ -88,7 +88,7 @@ export class Node {
   private static _manager: Manager;
   private reconnectTimeout?: NodeJS.Timeout;
   private reconnectAttempts = 1;
-  
+
   public info: LavalinkInfo|null = null;
 
   public useVersionPath = true;
@@ -144,7 +144,7 @@ export class Node {
     }
     this.http = new Pool(this.poolAddress, this.options.poolOptions);
     this.regions = options.regions?.map?.(x => x?.toLowerCase?.()) || [];
-        
+
     this.options.identifier = options.identifier || options.host;
     this.stats = {
       players: 0,
@@ -218,7 +218,7 @@ export class Node {
       r.method = "PATCH";
       r.headers = { Authorization: this.options.password, 'Content-Type': 'application/json' };
       r.body = JSON.stringify(data.playerOptions);
-      if(data.noReplace) { 
+      if(data.noReplace) {
         const url = new URL(`${this.poolAddress}${r.path}`);
         url.searchParams.append("noReplace", data.noReplace?.toString() || "false")
         r.path = url.toString().replace(this.poolAddress, "");
@@ -236,7 +236,7 @@ export class Node {
         player.paused = data.playerOptions.paused;
         player.playing = !data.playerOptions.paused;
       }
-  
+
       if(typeof data.playerOptions.position !== "undefined") player.position = data.playerOptions.position
       if(typeof data.playerOptions.voice !== "undefined") player.voice = data.playerOptions.voice;
       if(typeof data.playerOptions.volume !== "undefined") player.volume = data.playerOptions.volume;
@@ -253,7 +253,7 @@ export class Node {
         if(data.playerOptions.filters.lowPass) player.filterData.lowPass = data.playerOptions.filters.lowPass;
         if(data.playerOptions.filters.rotation) player.filterData.rotation = data.playerOptions.filters.rotation;
         if(data.playerOptions.filters.tremolo) player.filterData.tremolo = data.playerOptions.filters.tremolo;
-        player.checkFiltersState(oldFilterTimescale);        
+        player.checkFiltersState(oldFilterTimescale);
       };
     }
     if(res?.guildId === "string" && typeof res?.voice !== "undefined") {
@@ -263,9 +263,9 @@ export class Node {
       if(typeof res?.voice?.connected === "boolean" && res.voice.connected === false) return player.destroy();
       player.wsPing = res?.voice?.ping || player?.wsPing;
     }
-    return true;    
+    return true;
   }
-  
+
   /**
    * Deletes a Lavalink Player (from Lavalink)
    * @param guildId
@@ -287,7 +287,7 @@ export class Node {
 
   /**
    * Updates the session with a resuming key and timeout
-   * @param resumingKey 
+   * @param resumingKey
    * @param timeout
    */
   public updateSession(resumingKey?: string, timeout?: number): Promise<Session|{}> {
@@ -383,6 +383,8 @@ export class Node {
    * @returns The returned data
    */
   public async makeRequest<T>(endpoint: string, modify?: ModifyRequest): Promise<T> {
+    if(endpoint.startsWith('/loadtracks?identifier=undefined:')) endpoint = endpoint.replace('/loadtracks?identifier=undefined:', '/loadtracks?identifier='); // I hope this fix something? I mean it should :~)
+
     const options: Dispatcher.RequestOptions = {
       path: `${this.useVersionPath && this.version ? `/${this.version}` : ""}/${endpoint.replace(/^\//gm, "")}`,
       method: "GET",
@@ -523,12 +525,12 @@ export class Node {
           player.set("lastposition", player.position);
           player.connected = payload.state.connected;
           player.wsPing = payload.state.ping >= 0 ? payload.state.ping : player.wsPing <= 0 && player.connected ? null : player.wsPing || 0;
-          
+
           if(!player.createdTimeStamp && payload.state.time) {
               player.createdTimeStamp = payload.state.time;
               player.createdAt = new Date(player.createdTimeStamp);
           }
-          
+
           if(player.filterUpdated >= 1) {
               player.filterUpdated++;
               const maxMins = 8;
@@ -542,11 +544,11 @@ export class Node {
                 player.filterUpdated = 0;
               }
           }
-          
+
           if(typeof this.manager.options.position_update_interval === "number" && this.manager.options.position_update_interval > 0) {
             let interValSelfCounter = (this.manager.options.position_update_interval ?? 250) as number;
             if(interValSelfCounter < 25) interValSelfCounter = 25;
-            
+
             player.set("updateInterval", setInterval(() => {
               player.position += interValSelfCounter;
               player.set("lastposition", player.position);
